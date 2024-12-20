@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+	id 'pmd'
+	id 'jacoco'
+}
+
+application{
+    mainClass = 'su.Sudoku'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
+    testImplementation 'org.hamcrest:hamcrest:3.0'
+}
+
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    ignoreFailures = true
+    testLogging {
+        events "passed", "skipped", "failed"
+        }
+}
+
+check.dependsOn jacocoTestReport
+
+pmd {
+ignoreFailures = true
+    consoleOutput = false
+}
+pmdTest.enabled = false
+
+task generateJavadoc(type: Javadoc) {
+    source = sourceSets.main.allJava 
+    classpath = sourceSets.main.compileClasspath 
+    destinationDir = file("${buildDir}/docs/javadoc")
+}
+
+task copyHTML (type: Copy, dependsOn: ['build']) {
+    from 'src/main/html'
+    into 'build/reports'
+}
+
+task reports (type: Copy, dependsOn: ['javadoc', 'copyHTML', 'check']) {
+    from 'build/docs'
+    into 'build/reports'
+}
