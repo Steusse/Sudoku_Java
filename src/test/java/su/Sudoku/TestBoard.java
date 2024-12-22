@@ -2,6 +2,12 @@ package su.Sudoku;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 
 public class TestBoard {
@@ -62,6 +68,27 @@ public class TestBoard {
 		char[][] testColumns = testBoard.returnSudokuSquares();
 		for(int i = 0; i < 9; i++) {
 			assertArrayEquals(sudokuBoardSquares[i], testColumns[i]);
+		}
+	}
+	
+	@Test
+	public void testCreateInitialMap() {
+		Board testBoard = new Board();
+		testBoard.createInitialMap();
+		char[] testArray = {'1','2','3','4','5','6','7','8','9'};
+		TreeMap<String, ArrayList<Character>> testMap = testBoard.returnPossiblesMap();
+		assertEquals(testMap.get("00").get(0), '5');
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+			testMap.get("00").get(1);
+		});
+		assertEquals(testMap.get("54").get(0), '2');
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+			testMap.get("54").get(1);
+		});
+		int iterator = 0;
+		for(char character : testArray) {
+			assertEquals(testMap.get("02").get(iterator), character);
+			iterator += 1;
 		}
 	}
 }

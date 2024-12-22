@@ -1,5 +1,9 @@
 package su.Sudoku;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.ArrayList;
 
 /**
  * 
@@ -13,6 +17,8 @@ public class Board {
 	private char[][] sudokuColumns;
 	/** the squares of a Sudoku board. **/
 	private char[][] sudokuSquares;
+	/** each position on a Sudoku board and its possible numbers **/
+	private TreeMap<String, ArrayList<Character>> locationsWithPossibles = new TreeMap<>();
 	
 	/**
 	 * Board constructor that takes no starting parameter. Initializes a test Sudoku board
@@ -64,7 +70,7 @@ public class Board {
 	
 	/**
 	 * Returns the sudokuRows private attribute.
-	 * @return sudokuRows the char[][] that represents the rows of our sudoku board
+	 * @return sudokuRows the char[][] that represents the rows of our Sudoku board
 	 */
 	public char[][] returnSudokuRows() {
 		return this.sudokuRows;
@@ -85,7 +91,7 @@ public class Board {
 	
 	/**
 	 * Returns the sudokuColumns private attribute.
-	 * @return sudokuColumns the char[][] that represents the columns of our sudoku board
+	 * @return sudokuColumns the char[][] that represents the columns of our Sudoku board
 	 */
 	public char[][] returnSudokuColumns() {
 		return this.sudokuColumns;
@@ -114,9 +120,46 @@ public class Board {
 	
 	/**
 	 * Returns the sudokuSquares private attribute.
-	 * @return sudokuSquares the char[][] that represents the squares of our sudoku board
+	 * @return sudokuSquares the char[][] that represents the squares of our Sudoku board
 	 */
 	public char[][] returnSudokuSquares() {
 		return this.sudokuSquares;
+	}
+	
+	/**
+	 * Creates a HashMap of the sudoku board positions and assigns the number located in
+	 * the startingBoard private attribute if already known as a length one ArrayList<Character>
+	 * or an ArrayList<Character> containing 1-9. It then uses TreeMap to sort the Map.
+	 */
+	public void createInitialMap() {
+		Map<String, ArrayList<Character>> unsortedMap = new HashMap<>();
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				ArrayList<Character> allPossibles = new ArrayList<>();
+				char[] charArray = {'1','2','3','4','5','6','7','8','9'};
+				for(int a = 0; a < charArray.length; a++) {
+					allPossibles.add(Character.valueOf(charArray[a]));
+				}
+				String identifier = "" + i + j;
+				if(startingBoard[i][j] == '.') {
+					unsortedMap.put(identifier, allPossibles);
+				}
+				else {
+					ArrayList<Character> setAnswer = new ArrayList<>();
+					setAnswer.add(Character.valueOf(startingBoard[i][j]));
+					unsortedMap.put(identifier, setAnswer);
+				}
+			}
+		}
+		locationsWithPossibles = new TreeMap<>(unsortedMap);
+	}
+	
+	/**
+	 * Returns the locationsWithPossibles private attribute.
+	 * @return locationsWithPossibles the TreeMap<String, ArrayList<Character>> that
+	 * represents all the positions of the Sudoku board and their possible answers
+	 */
+	public TreeMap<String, ArrayList<Character>> returnPossiblesMap() {
+		return this.locationsWithPossibles;
 	}
 }
