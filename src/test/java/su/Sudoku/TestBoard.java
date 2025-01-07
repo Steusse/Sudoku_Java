@@ -106,6 +106,25 @@ public class TestBoard {
 			assertNotEquals(position, '3');
 			assertNotEquals(position, '7');
 		}
+	}
+	
+	//Need to finish this test function to check for the solution.
+	@Test
+	public void testComputeSudoku() {
+		char[][] sudokuBoard = {{'5','3','.','.','7','.','.','.','.'},{'6','.','.','1','9','5','.','.','.'},
+								{'.','9','8','.','.','.','.','6','.'},{'8','.','.','.','6','.','.','.','3'},
+								{'4','.','.','8','.','3','.','.','1'},{'7','.','.','.','2','.','.','.','6'},
+								{'.','6','.','.','.','.','2','8','.'},{'.','.','.','4','1','9','.','.','5'},
+								{'.','.','.','.','8','.','.','7','9'} };
+		Board testBoard = new Board(sudokuBoard);
+		boolean finished = false;
+		//To avoid a potential infinite loop
+		for(int i = 0; i < 10;) {
+			while(finished == false) {
+				finished = testBoard.computeSudoku();
+				i+= 1;
+			}
+		}
 		
 	}
 }

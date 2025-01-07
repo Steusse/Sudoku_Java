@@ -42,6 +42,7 @@ public class Board {
 		setSudokuRows(board);
 		setSudokuColumns(board);
 		setSudokuSquares(board);
+		createInitialMap();
 		
 	}
 	
@@ -186,5 +187,99 @@ public class Board {
 			}
 		}
 		return newPossibles;
+	}
+	
+	/**
+	 * This is our primary function to find our Sudoku solution. It checks every position in order and
+	 * updates the possible answers ArrayList by checking the relevant row, column, and square of that position.
+	 * @return A boolean that signals when the function can no longer update the Sudoku Board.
+	 */
+	public boolean computeSudoku() {
+		boolean finished = true;
+		int squareNum = 0;
+		for(int i = 0; i < 9; i++) {
+			squareNum = 0;
+			if(i > 2) {
+				squareNum += 3;
+			}
+			if(i > 5) {
+				squareNum += 3;
+			}
+			for(int j = 0; j < 9; j++) {
+				if(j == 3 || j == 6) {
+					squareNum += 1;
+				}
+				String position = "" + i + j;
+				if(locationsWithPossibles.get(position).size() == 1 && locationsWithPossibles.get(position).get(0) != '.') {
+					continue;
+				}
+				else {
+					finished = false;
+					//Check the position's row
+					ArrayList<Character> newPossibles = findPossibleNumbers(sudokuRows[i], locationsWithPossibles.get(position));
+					locationsWithPossibles.replace(position, newPossibles);
+					//Check the position's column
+					newPossibles = findPossibleNumbers(sudokuColumns[j], locationsWithPossibles.get(position));
+					locationsWithPossibles.replace(position, newPossibles);
+					//Check the position's square
+					newPossibles = findPossibleNumbers(sudokuSquares[squareNum], locationsWithPossibles.get(position));
+					locationsWithPossibles.replace(position, newPossibles);
+					int squarePosition = getSquarePosition(i, j);
+					//If there is a number with only 1 valid location we insert it at that location
+					if(locationsWithPossibles.get(position).size() == 1) {
+						sudokuRows[i][j] = locationsWithPossibles.get(position).get(0);
+						sudokuColumns[j][i] = locationsWithPossibles.get(position).get(0);
+						sudokuSquares[squareNum][squarePosition] = locationsWithPossibles.get(position).get(0);
+					}
+				}
+			}
+		}
+		return finished;
+	}
+	
+	/**
+	 * 
+	 * @param currentRow The row of a position in our Sudoku board.
+	 * @param currentColumn The column of a position in our Sudoku board.
+	 * @return The matching position in the square of our Sudoku board.
+	 */
+	public int getSquarePosition(int currentRow, int currentColumn) {
+		int row = currentRow;
+		int column = currentColumn;
+		if(row == 0 || row == 3 || row == 6) {
+			if(column == 0 || column == 3 || column == 6) {
+				return 0;
+			}
+			else if(column == 1 || column == 4 || column == 7) {
+				return 1;
+			}
+			else if(column == 2 || column == 5 || column == 8) {
+				return 2;
+			}
+		}
+		else if(row == 1 || row == 4 || row == 7) {
+			if(column == 0 || column == 3 || column == 6) {
+				return 3;
+			}
+			else if(column == 1 || column == 4 || column == 7) {
+				return 4;
+			}
+			else if(column == 2 || column == 5 || column == 8) {
+				return 5;
+			}
+		}
+		else if(row == 2 || row == 5 || row == 8) {
+			if(column == 0 || column == 3 || column == 6) {
+				return 6;
+			}
+			else if(column == 1 || column == 4 || column == 7) {
+				return 7;
+			}
+			else if(column == 2 || column == 5 || column == 8) {
+				return 8;
+			}
+		}
+		System.out.println("Error in finding square position");
+		return -1;
 	}
 }
