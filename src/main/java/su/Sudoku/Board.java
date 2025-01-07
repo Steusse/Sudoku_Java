@@ -21,8 +21,8 @@ public class Board {
 	private TreeMap<String, ArrayList<Character>> locationsWithPossibles = new TreeMap<>();
 	
 	/**
-	 * Board constructor that takes no starting parameter. Initializes a test Sudoku board
-	 * Only for testing purposes.
+	 * Board constructor that takes no starting parameter. Initializes a test Sudoku board.
+	 * It is only for testing purposes.
 	 */
 	public Board() {
 		char[][] testBoard = {{'5','3','.','.','7','.','.','.','.'},{'6','.','.','1','9','5','.','.','.'},
@@ -157,9 +157,34 @@ public class Board {
 	/**
 	 * Returns the locationsWithPossibles private attribute.
 	 * @return locationsWithPossibles the TreeMap<String, ArrayList<Character>> that
-	 * represents all the positions of the Sudoku board and their possible answers
+	 * represents all the positions of the Sudoku board and their possible answers.
 	 */
 	public TreeMap<String, ArrayList<Character>> returnPossiblesMap() {
 		return this.locationsWithPossibles;
+	}
+	
+	/**
+	 * 
+	 * @param charArray An array that represents a row,column, or square of a Sudoku board.
+	 * @param possibleNumbers An ArrayList of Characters representing the possible answers for a
+	 * given Sudoku position.
+	 * @return newPossibles an adjusted Arraylist of possible answers that accounts for the characters in the
+	 * given char[] array.
+	 */
+	public ArrayList<Character> findPossibleNumbers(char[] charArray, ArrayList<Character> possibleNumbers) {
+		ArrayList<Character> newPossibles = possibleNumbers;
+		for(int i = 0; i < charArray.length; i++) {
+			if(charArray[i] == '.') {
+				continue;
+			}
+			else {
+				for(int j = 0; j < possibleNumbers.size(); j++) {
+					if(charArray[i] == possibleNumbers.get(j).charValue()) {
+						newPossibles.remove(j);
+					}
+				}
+			}
+		}
+		return newPossibles;
 	}
 }

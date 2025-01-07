@@ -3,6 +3,7 @@ package su.Sudoku;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -90,5 +91,21 @@ public class TestBoard {
 			assertEquals(testMap.get("02").get(iterator), character);
 			iterator += 1;
 		}
+	}
+	
+	@Test
+	public void testFindPossibleNumbers() {
+		Board testBoard = new Board();
+		testBoard.setSudokuRows(testBoard.returnStartingBoard());
+		testBoard.createInitialMap();
+		char[] testArray = testBoard.returnSudokuRows()[0];
+		ArrayList<Character> testArrayList = testBoard.returnPossiblesMap().get("02");
+		ArrayList<Character> updatedArrayList = testBoard.findPossibleNumbers(testArray, testArrayList);
+		for(Character position: updatedArrayList) {
+			assertNotEquals(position, '5');
+			assertNotEquals(position, '3');
+			assertNotEquals(position, '7');
+		}
+		
 	}
 }
