@@ -227,9 +227,7 @@ public class Board {
 					int squarePosition = getSquarePosition(i, j);
 					//If there is a number with only 1 valid location we insert it at that location
 					if(locationsWithPossibles.get(position).size() == 1) {
-						sudokuRows[i][j] = locationsWithPossibles.get(position).get(0);
-						sudokuColumns[j][i] = locationsWithPossibles.get(position).get(0);
-						sudokuSquares[squareNum][squarePosition] = locationsWithPossibles.get(position).get(0);
+						updateArrays(i, j, squareNum, squarePosition, position);
 					}
 				}
 			}
@@ -281,5 +279,19 @@ public class Board {
 		}
 		System.out.println("Error in finding square position");
 		return -1;
+	}
+	
+	/**
+	 * This function just updates all our storage arrays after we find the answer to a position.
+	 * @param xPosition The row of our current Sudoku board position.
+	 * @param yPosition The column of our current Sudoku board position.
+	 * @param square The square of our current Sudoku board position.
+	 * @param squarePosition The position in the square of our current Sudoku board position.
+	 * @param position The numbered position of our current Sudoku board.
+	 */
+	public void updateArrays(int xPosition, int yPosition, int square, int squarePosition, String position) {
+		sudokuRows[xPosition][yPosition] = locationsWithPossibles.get(position).get(0);
+		sudokuColumns[yPosition][xPosition] = locationsWithPossibles.get(position).get(0);
+		sudokuSquares[square][squarePosition] = locationsWithPossibles.get(position).get(0);
 	}
 }
