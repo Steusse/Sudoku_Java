@@ -294,4 +294,13 @@ public class Board {
 		sudokuColumns[yPosition][xPosition] = locationsWithPossibles.get(position).get(0);
 		sudokuSquares[square][squarePosition] = locationsWithPossibles.get(position).get(0);
 	}
+	
+	public void outputSudoku() {
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				System.out.print("|" + returnSudokuRows()[i][j] + " | ");
+			}
+			System.out.println();
+		}
+	}
 }
